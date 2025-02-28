@@ -11,4 +11,5 @@ public interface IApplicationDbContext
     DbSet<Comment> Comments { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync();
 }

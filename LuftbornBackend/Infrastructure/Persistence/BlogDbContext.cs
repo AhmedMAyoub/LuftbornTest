@@ -22,6 +22,26 @@ namespace Infrastructure.Persistence
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
+        public async Task<int> SaveChangesAsync()
+        {
+            // if entity is auditable, set the CreatedAt and UpdatedAt properties
+            foreach (var entry in ChangeTracker.Entries<IBaseAuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedAt = DateTime.Now;
+                        entry.Entity.UpdatedAt = DateTime.Now;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedAt = DateTime.Now;
+                        break;
+                }
+            }
+
+            return await base.SaveChangesAsync();
+        }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             // if entity is auditable, set the CreatedAt and UpdatedAt properties
