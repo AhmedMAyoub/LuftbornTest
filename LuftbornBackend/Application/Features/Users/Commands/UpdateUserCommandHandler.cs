@@ -24,8 +24,8 @@ namespace Application.Features.Users.Commands
             {
                 return false;
             }
-            user.Username = request.UserDTO.Username;
-            user.Email = request.UserDTO.Email;
+            user.Username = request.UserDTO.Username ?? user.Username;
+            user.Email = request.UserDTO.Email ?? user.Email;
             await _userRepository.UpdateAsync(user);
             return true;
         }

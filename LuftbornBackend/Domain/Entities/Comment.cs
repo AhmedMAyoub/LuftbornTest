@@ -8,8 +8,8 @@ namespace Domain.Entities
         public string Content { get; set; } = string.Empty;
         public Guid PostId { get; set; }
         public Guid AuthorId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? DeletedAt { get; set; }
         public Post Post { get; set; } = null!;
         public User Author { get; set; } = null!;

@@ -30,7 +30,9 @@ namespace BlogApi.Api.Controllers
         {
             var result = await _mediator.Send(new UpdateUserCommand(id, userDto));
             if (!result) return NotFound();
-            return NoContent();
+
+            var response = new { message = "User Updated successfully" };
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
