@@ -43,6 +43,10 @@ namespace Infrastructure.Persistence.Configurations
                 .WithOne(c => c.Author)
                 .HasForeignKey(c => c.AuthorId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // make the email and username unique
+            builder.HasIndex(u => u.Email).IsUnique();
+            builder.HasIndex(u => u.Username).IsUnique();
         }
     }
 }

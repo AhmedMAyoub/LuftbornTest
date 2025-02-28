@@ -30,11 +30,11 @@ namespace Infrastructure.Persistence
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedAt = DateTime.Now;
-                        entry.Entity.UpdatedAt = DateTime.Now;
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
+                        entry.Entity.UpdatedAt = DateTime.UtcNow;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.UpdatedAt = DateTime.Now;
+                        entry.Entity.UpdatedAt = DateTime.UtcNow;
                         break;
                 }
             }
@@ -50,11 +50,11 @@ namespace Infrastructure.Persistence
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedAt = DateTime.Now;
-                        entry.Entity.UpdatedAt = DateTime.Now;
+                        entry.Entity.CreatedAt = DateTime.UtcNow;
+                        entry.Entity.UpdatedAt = DateTime.UtcNow;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.UpdatedAt = DateTime.Now;
+                        entry.Entity.UpdatedAt = DateTime.UtcNow;
                         break;
                 }
             }

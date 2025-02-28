@@ -14,6 +14,8 @@ builder.Services
     .AddApplication()
     .AddInfrastructure();
 
+builder.Services.AddControllers();
+
 builder.Services.AddDbContext<BlogDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
@@ -28,5 +30,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
