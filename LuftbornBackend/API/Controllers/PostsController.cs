@@ -1,8 +1,10 @@
 ﻿using Application.Features.Posts.Commands;
 using Application.Features.Posts.DTOs;
+using Application.Features.Posts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Api.Controllers
 {
@@ -21,6 +23,15 @@ namespace Api.Controllers
         [Authorize]
         public async Task<IActionResult> CreatePost([FromBody] CreatePostDTO postDto)
         {
+            // get user id from token
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+                return Unauthorized();
+
+            if (!Guid.TryParse(userIdClaim, out var userId))
+                return BadRequest("Invalid user ID format.");
+
+            postDto.AuthorId = userId;
             var command = new CreatePostCommand(postDto);
             var post = await _mediator.Send(command);
             return CreatedAtAction(nameof(CreatePost), new { id = post.Id }, post);
@@ -49,18 +60,24 @@ namespace Api.Controllers
             return Ok(response);
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetPostById(Guid id)
-        //{
-        //    var post = await _mediator.Send(new GetPostByIdQuery(id));
-        //    return post != null ? Ok(post) : NotFound();
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetPosts()
+        {
+            var posts = await _mediator.Send(new GetAllPostsQuery());
+            return Ok(posts);
+        }
 
-        //[HttpGet("user/{userId}")]
-        //public async Task<IActionResult> GetPostsByUserId(Guid userId)
-        //{
-        //    var posts = await _mediator.Send(new GetPostsByUserIdQuery(userId));
-        //    return Ok(posts);
-        //}
+        [HttpGet("my-posts")]
+        [Authorize]
+        public async Task<IActionResult> GetMyPosts()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+                return Unauthorized();
+            if (!Guid.TryParse(userIdClaim, out var userId))
+                return BadRequest("Invalid user ID format.");
+            var posts = await _mediator.Send(new GetAllPostsByUserIdQuery(userId));
+            return Ok(posts);
+        }
     }
 }

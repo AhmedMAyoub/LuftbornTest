@@ -13,9 +13,6 @@ namespace Application.Features.Posts.Validators
 
             RuleFor(x => x.Content)
                 .NotEmpty().WithMessage("Content is required");
-
-            RuleFor(x => x.AuthorId)
-                .NotEmpty().WithMessage("AuthorId is required");
         }
     }
 }
