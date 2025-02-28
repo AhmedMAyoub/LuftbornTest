@@ -2,10 +2,11 @@
 using Application.Features.Users.DTOs;
 using Application.Features.Users.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace BlogApi.Api.Controllers
+namespace Api.Controllers
 {
     [Route("api/users")]
     [ApiController]
@@ -26,6 +27,7 @@ namespace BlogApi.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDTO userDto)
         {
             var result = await _mediator.Send(new UpdateUserCommand(id, userDto));
@@ -36,6 +38,7 @@ namespace BlogApi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             var result = await _mediator.Send(new DeleteUserCommand(id));
@@ -46,6 +49,7 @@ namespace BlogApi.Api.Controllers
         }
 
         [HttpGet("me")]
+        [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

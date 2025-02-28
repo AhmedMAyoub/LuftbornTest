@@ -1,11 +1,10 @@
 ﻿using Application.Features.Posts.Commands;
 using Application.Features.Posts.DTOs;
-using Application.Features.Users.Commands;
-using Application.Features.Users.DTOs;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlogApi.Api.Controllers
+namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,6 +18,7 @@ namespace BlogApi.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreatePost([FromBody] CreatePostDTO postDto)
         {
             var command = new CreatePostCommand(postDto);
@@ -27,6 +27,7 @@ namespace BlogApi.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdatePost(Guid id, [FromBody] UpdatePostDTO updatePostDTO)
         {
             var result = await _mediator.Send(new UpdatePostCommand(id, updatePostDTO));
@@ -37,6 +38,7 @@ namespace BlogApi.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeletePost(Guid id)
         {
             var result = await _mediator.Send(new DeletePostCommand(id));
